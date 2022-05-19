@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import './SMSForm.css';
+//import './SMSForm.css';
+
+import * as SnapshotFirebase from './SnapshotFirebase.js';
 
 class SMSForm extends Component {
   constructor(props) {
@@ -7,7 +9,7 @@ class SMSForm extends Component {
     this.state = {
       message: {
         to: '',
-        body: ''
+        body: 'Please review us on Facebook or Yelp!'
       },
       submitting: false,
       error: false
@@ -54,36 +56,53 @@ class SMSForm extends Component {
   }
 
   render() {
+    
     return (
       <form
         onSubmit={this.onSubmit}
-        className={this.state.error ? 'error sms-form' : 'sms-form'}
+        className={this.state.error}
       >
         <div>
-          <label htmlFor="to">To:</label>
-          <input
-            type="tel"
-            name="to"
-            id="to"
-            value={this.state.message.to}
-            onChange={this.onHandleChange}
-          />
+        <table>
+          <tbody>
+            <tr>
+              <td>
+                <label htmlFor="to">To:</label>
+                <input
+                  type="tel"
+                  name="to"
+                  id="to"
+                  value={this.state.message.to}
+                  onChange={this.onHandleChange}
+                />
+              </td>
+              <td>
+                <div>
+                <label htmlFor="body">Message:</label>
+                <textarea
+                  name="body"
+                  id="body"
+                  value={this.state.message.body}
+                  onChange={this.onHandleChange}
+                />
+                </div>
+              </td>
+              <td>
+                <button type="submit" disabled={this.state.submitting}>
+                  Send message
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+          
+          
         </div>
-        <div>
-          <label htmlFor="body">Body:</label>
-          <textarea
-            name="body"
-            id="body"
-            value={this.state.message.body}
-            onChange={this.onHandleChange}
-          />
-        </div>
-        <button type="submit" disabled={this.state.submitting}>
-          Send message
-        </button>
+        
       </form>
     );
   }
+ 
 }
 
 export default SMSForm;
