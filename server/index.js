@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express');
 const bodyParser = require('body-parser');
 const pino = require('express-pino-logger')();
@@ -11,11 +12,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(pino);
 
-app.get('/api/greeting', (req, res) => {
-  const name = req.query.name || 'World';
-  res.setHeader('Content-Type', 'application/json');
-  res.send(JSON.stringify({ greeting: `Hello ${name}!` }));
-});
+const sendWhen = new Date(new Date().getTime() + 2 * 60000);
 
 app.post('/api/messages', (req, res) => {
   res.header('Content-Type', 'application/json');
@@ -23,7 +20,9 @@ app.post('/api/messages', (req, res) => {
     .create({
       from: process.env.TWILIO_PHONE_NUMBER,
       to: req.body.to,
-      body: req.body.body
+      body: req.body.body,
+      scheduleType: 'fixed',
+      sendAt: sendWhen.toISOString(),
     })
     .then(() => {
       res.send(JSON.stringify({ success: true }));

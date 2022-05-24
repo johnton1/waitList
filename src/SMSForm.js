@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 //import './SMSForm.css';
 
-import * as SnapshotFirebase from './SnapshotFirebase.js';
+//import * as SnapshotFirebase from './SnapshotFirebase.js';
 
 class SMSForm extends Component {
   constructor(props) {
@@ -28,24 +28,7 @@ class SMSForm extends Component {
       },
       body: JSON.stringify(this.state.message)
     })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          this.setState({
-            error: false,
-            submitting: false,
-            message: {
-              to: '',
-              body: ''
-            }
-          });
-        } else {
-          this.setState({
-            error: true,
-            submitting: false
-          });
-        }
-      });
+      
   }
 
   onHandleChange(event) {
