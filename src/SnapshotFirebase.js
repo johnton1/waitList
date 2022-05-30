@@ -1,16 +1,20 @@
 import React, {useState, useEffect} from "react";
 import firebase from "./firebase.js";
 import "firebase/firestore";
-
+import { Dropdown, Option } from "./Dropdown.js";
 
 function SnapshotFirebase() {
   const [customers, setCustomers] = useState([]);
-  //const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [service, setService] = useState("");
   const ref = firebase.firestore().collection("customer");
   const timeStamp = firebase.firestore.FieldValue.serverTimestamp();
-
+  
+  const pastCustomer = firebase.firestore().collection("pastCustomer");
+  const handleSelect = (e) => {
+    setService(e.target.value);
+  }
   //real time get function setLoading(true);setLoading(false); 
  function getCustomers() {
     
@@ -24,7 +28,8 @@ function SnapshotFirebase() {
       });
       setCustomers(q); 
     });
-   
+    
+
   }  
 
   useEffect(() => {
@@ -38,6 +43,7 @@ function SnapshotFirebase() {
       
       name,
       phoneNumber,
+      service,
       timeStamp,
     }
 
@@ -47,6 +53,11 @@ function SnapshotFirebase() {
       .catch((err) => {
         console.error(err);
       }); 
+
+      pastCustomer.doc(newCustomer.phoneNumber)
+      .set(newCustomer).catch((err) => {
+        console.error(err);
+      });
   }
  
       
@@ -63,15 +74,17 @@ function SnapshotFirebase() {
 
   } 
   
+
   function sendSMS(customer) {
-    ref.doc(customer.phoneNumber);
+   
+      ref.doc(customer.phoneNumber);
     const data = {
       to: customer.phoneNumber,
-      body: 'Please review us',
+      body: 'Please review us on Facebook or Yelp!',
     }
     
-
-    fetch('/api/messages', {
+    
+      fetch('/api/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -88,6 +101,11 @@ function SnapshotFirebase() {
         throw new Error('Unexpected Error. Please check the logs.')
       };
     });
+
+  
+    
+
+  
   }
 
   const onSubmit = async(e) => {
@@ -127,8 +145,21 @@ function SnapshotFirebase() {
             </td>
             <td>
               <input placeholder="+1 XXX XXX XXXX " value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} type="tel" name="to" id="to"/>
-              <button onClick={() => addCustomer()}> Check In </button>
             </td>
+            <td>
+              <Dropdown 
+              onChange={handleSelect}>
+                <Option selected value="Choose your service"/>
+                <Option value="Option 1"/>
+                <Option value="Option 2"/>
+              </Dropdown>
+              
+            </td>
+              <button onClick={() => addCustomer()}> Check In </button>
+              
+              
+            
+            
           </tr>
           </tbody>
           
