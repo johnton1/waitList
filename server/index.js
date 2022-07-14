@@ -18,10 +18,10 @@ app.use(pino);
 
 
 
-
+// send 8pm-9pm 0 20-21 * * *
   app.post('/api/messages', (req, res) => {
   res.header('Content-Type', 'application/json');
-  cron.schedule("0 20-21 * * *", function() {
+  cron.schedule("* * * * *", function() {
     console.log("running every 1 minute");
     client.messages
     .create({
