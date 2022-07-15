@@ -78,15 +78,17 @@ function SnapshotFirebase() {
   
 
   function sendSMS(customer) {
-   
       ref.doc(customer.phoneNumber);
     const data = {
       to: customer.phoneNumber,
       body: 'Please review us on Facebook or Yelp!',
     }
-    
-    
-      fetch('/api/messages', {
+    /* setTimeout(() => {
+        }, 15000)
+    */
+ 
+   setTimeout(() => {
+     fetch('/api/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -103,10 +105,9 @@ function SnapshotFirebase() {
         throw new Error('Unexpected Error. Please check the logs.')
       };
     });
+   }, 7200000); //send 2 hour after check out
 
-  
     
-
   
   }
 
